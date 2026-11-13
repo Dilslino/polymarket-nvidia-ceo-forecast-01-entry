@@ -14,9 +14,16 @@ Config (unanimous LOCO winner, all 6 folds; HistCV-confirmed):
 
 Local validation (6 practice cases + 11 HistCV checkpoints):
   Practice 0.2651, LOCO-5 0.2480, p02 held-out 0.3635, HistCV 2.4167,
-  mederr 0.7288 (LOCO-5 0.6887), cov90 0.8977, Tier C 0.7176, ratio 0.7276.
+  mederr 0.7288, cov90 0.8977, Tier C 0.7176, ratio 0.7276.
   V2 baseline for comparison: 0.2830 / 0.2673 / 0.3729 / 2.5639 / 0.7675 /
   0.8337 / 0.8003 / 0.7374.
+  Gates passed 5/6: LOCO-5 0.2480 <= 0.250, p02 0.3635 <= V2 0.3729,
+  HistCV 2.4167 <= V2 2.5639, cov90 0.8977 in [0.87, 0.91],
+  Tier C 0.7176 < V2 0.8003. The one thin miss: Practice pooled 0.2651
+  vs the 0.262 target (gap +0.0031, pulled up by p02 0.3635).
+  A2 (per-tier OOF multipliers on top of this blend) was REJECTED: it
+  worsened p02 held-out (0.3946) and Tier C (0.8059) — overfit — so
+  the blend below stays un-multiplied.
 
 Pure Python 3.13 stdlib, no network, deterministic.
 Reads every *.in in $MAKEFUN_INPUT_DIR (else /input), writes one <id>.out
@@ -937,7 +944,19 @@ def a3_apply_asym(fc, rows, ids):
 
 
 def a3_blend(fc_a, fc_b, w, ids):
-    """q = w*a + (1-w)*b per (market, minute); sort each row for non-crossing."""
+    """q = w*a + (1-w)*b per (market, minute); sort each row for non-crossing.
+
+    Called with w = A3_W_V2 = 0.6 on the V2 backbone (fc_a) and 0.4 on
+    V5-best-pure (fc_b, pure-persistence median from the LOCO-validated
+    162-config grid: winsor_k=10, core_scale=0.70, tail_scale=0.95,
+    pi0_core_cap=0, jump_prob=0). V2 supplies the interval shape, V5 the
+    persistence median; the 0.6/0.4 split is the unanimous LOCO winner
+    (Practice 0.2754, LOCO-5 0.2593 on the blend alone, before the asym
+    shift). No per-tier multipliers are applied here: A2's 12-DOF OOF
+    multipliers looked better in-sample (0.2692) but worsened the p02
+    held-out (0.3946 vs V2 0.3729) and Tier C (0.8059 vs 0.8003), so
+    they were rejected and the blend stays un-multiplied.
+    """
     out = {}
     for mid in ids:
         qa, qb = fc_a[mid], fc_b[mid]

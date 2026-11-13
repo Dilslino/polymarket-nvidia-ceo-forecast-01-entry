@@ -68,11 +68,13 @@ Notes:
 
 ## Measured results (kit authoritative scorer, data/score-practice.py)
 
-| | V2 final | house baseline | V1 (parametric) |
+Rebuilt V2 (this session, transcripts after the 09:00 UTC opening):
+
+| | V2 rebuild | house baseline | V1 (parametric) |
 |---|---|---|---|
-| overall loss | **0.280322** | 0.363589 | 0.2880 |
-| vs baseline | **−22.9%** | — | −22.5% |
-| per-case | p00 0.4996, p01 0.3233, p02 0.3742, p03 0.2519, p04 0.2004, p05 0.1056 | 0.5361, 0.3804, 0.4084, 0.3686, 0.2988, 0.2382 | 0.4634, 0.3098, 0.3519, 0.2518, 0.2071, 0.1439 |
+| overall loss | **0.282992** | 0.363589 | 0.2880 |
+| vs baseline | **−22.2%** | — | −22.5% |
+| per-case | p00 0.4932, p01 0.3229, p02 0.3729, p03 0.2700, p04 0.2034, p05 0.1058 | 0.5361, 0.3804, 0.4084, 0.3686, 0.2988, 0.2382 | 0.4634, 0.3098, 0.3519, 0.2518, 0.2071, 0.1439 |
 | wins | 6/6 cases | — | 6/6 |
 
 Per-tier (practice): T1 (active) dominates the loss (0.22–1.29/case) —
@@ -84,13 +86,12 @@ because practice prices drifted up after checkpoints (event heating
 up); the median is anchored to p0 by design (persistence beats drift
 in every test). Pinball loss, the ranking metric, is what was tuned.
 
-## Runtime / determinism (measured)
+## Runtime / determinism (measured, this rebuild)
 
 - Per-case (single-case runs, incl. interpreter startup):
-  p00 0.293s, p01 0.337s, p02 0.359s, p03 0.408s, p04 0.470s,
-  p05 0.514s. Limit 8s/case; target <0.5s met for 5/6 cases
-  (p05, the largest, is 0.514s — essentially at target).
-- Two runs byte-identical (sha256 match across out/ and out2/).
+  p00 0.339s, p01 0.396s, p02 0.405s, p03 0.439s, p04 0.517s,
+  p05 0.590s. Limit 8s/case; all well under the limit.
+- Two runs byte-identical (sha256 e2011199a847cd93e97dd2c0b73be2e893a1b94c7cdae20f90e4a1ab46ab6e61 across out/ and out2/).
 - Output 179–242 KB per case (limit 1 MiB); format validated
   (exactly {"forecasts": [...]}, every case market once, 240 rows ×
   5 monotone quantiles in [0,1]).

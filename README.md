@@ -23,10 +23,10 @@ CV), and measured results.
 
 ## Practice score (local, kit scorer)
 
-Mean pinball loss **0.280322** over the 6 practice cases (153,600
-items) vs house baseline **0.363589** (−22.9%), winning all 6 cases.
-Per-case: p00 0.4996, p01 0.3233, p02 0.3742, p03 0.2519, p04 0.2004,
-p05 0.1056. Runtime 0.29–0.51 s per case (limit 8 s); two runs
+Mean pinball loss **0.282992** over the 6 practice cases (153,600
+items) vs house baseline **0.363589** (−22.2%), winning all 6 cases.
+Per-case: p00 0.4932, p01 0.3229, p02 0.3729, p03 0.2700, p04 0.2034,
+p05 0.1058. Runtime 0.34–0.59 s per case (limit 8 s); two runs
 byte-identical.
 
 ## Run
